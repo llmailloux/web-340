@@ -1,0 +1,9 @@
+{
+    "name": "if-else-render",
+    "author": "Laurie Mailloux",
+    "private": true,
+    "dependencies": {
+        "ejs": "^2.7.4",
+        "express": "^4.17.1"
+    }
+}
