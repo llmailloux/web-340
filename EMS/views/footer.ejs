@@ -1,0 +1,29 @@
+<!--
+============================================
+; Title: footer.ejs
+; Author: Laurie Mailloux
+; Date: March 19 2020
+; Description: Footer
+;===========================================
+-->
+
+<footer class="container-fluid footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <p></p>
+          <p></p>
+          <% let year = (new Date()).getFullYear() %>
+          <p style="float:right;">&copy;<%= year %> Laurie Mailloux</p>
+        </div>
+      </div>
+  
+    </div>
+    <style>
+      .container{
+        color: rgb(57, 59, 55);
+        font-style: oblique;
+        float: right;
+      }
+    </style>
+  </footer>
