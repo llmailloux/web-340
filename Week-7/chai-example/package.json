@@ -1,0 +1,11 @@
+{
+    "name": "chai-example",
+    "author": "Laurie Mailloux",
+    "private": true,
+    "version": "0.0.1",
+    "dependencies": {
+        "chai": "^4.2.0",
+        "mocha": "^7.1.1"
+    },
+    "scripts": {"test": "mocha"}
+}
