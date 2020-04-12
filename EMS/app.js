@@ -18,24 +18,6 @@ var logger = require("morgan");
 var app = express();
 app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "ejs");
-app.use(logger("short"));
-
-//employee array
-var employee = [{
-    firstName: 'Jazmyn',
-    lastName: 'Fish',
-    email: 'jfish@fishing.com'
-},
-{ 
-    firstName: 'Joshua',
-    lastName: 'James',
-    email: 'jjames@teball.com'
-},
-{   firstName: 'Jace',
-    lastName: 'Jacob',
-    email: 'jjacob@tunetv.net',
-}
-];
 
 //routes
 app.get("/", function(request, response){
@@ -57,8 +39,33 @@ app.get("/", function(request, response){
     });
   });
   
+  app.get('/view', function(request, response) {
+    response.render('view', {
+      title: 'View of Employees'
+    });
+  });
+
+  const firstName = request.body.txtFirstName;
+  const lastName = request.body.txtLastName;
+  console.log(firstName + " " + lastName);
+
+  let employee = new Employee({
+    first: firstName,
+    last: lastName,
+  });
+
+  employees.save(function(err) {
+    if (err) {
+      console.log(err);
+      throw err;
+    } else {
+      console.log(firstName + ' saved successfully!');
+      res.redirect('/');
+    }
+  });
+});
+  
  //create server
 http.createServer(app).listen(8080, function(){
     console.log("Application started on port 8080!");
 });
-
