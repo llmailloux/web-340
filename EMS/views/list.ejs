@@ -9,12 +9,37 @@
 
 <%- include('header') %>
 <%- include('navbar') %>
-<div class="container">
-  <div class="row">
-    <h2>Employee List</h2>
-  </div>
-  <div class="row">
-   
+<h2>Employee List</h2><br>
+
+<section class='employees'>
+    <p>
+        N2N Employees:
+    </p>
+</section>
+
+<div role = 'main' class = 'container'>
+    <% if (employee.length) { %>
+    <table class='table bg-primary table-striped table-hover'>
+        <thead>
+        <tr>
+            <th class='text-white'> First Name</th>
+            <th class='text-white'> Last Name</th>
+        </tr>
+        </thead>
+        <tbody>
+            <% employee.forEach(function(entry) { %>
+                <tr>
+                    <td><%= entry.first %></td>
+                    <td><%= entry.last %></td>
+                    <td><a style='color: white' href='/view/<%= entry.first %>'</a> View</a></td>
+                </tr>
+           <% }) %>
+        </tbody>
+        </table>
+        <% } else { %> No Employees <a href = '/new'>Add Employee</a>
+        <% } %>
+    </div>
+</div>
   <%- include("footer") %>
 </div>
 

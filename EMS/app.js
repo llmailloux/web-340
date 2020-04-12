@@ -9,15 +9,63 @@
 
 //start program
 //requires
-var express = require("express");
-var http = require("http");
-var path = require("path");
-var logger = require("morgan");
+const express = require("express");
+const http = require("http");
+const path = require("path");
+const logger = require("morgan");
+const mongoose = require("mongoose");
+const helmet = require("helmet");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const csrf = require("csurf");
 
-//app function
-var app = express();
+var Employee = require("./models/employee");
+
+var csrfProtection = csrf({ cookie: true});
+
+var mongoDB = "mongodb+srv://Jazmyn:crazy6kids@buwebdev-cluster-1-2bwgd.mongodb.net/test"
+
+mongoose.connect(mongoDB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+mongoose.Promise = global.Promise;
+
+var db = mongoose.connection;
+db.on("error", console.error.bind(console, "MongoDB connestion error:"));
+db.once("open", function(){
+  console.log("Application  connected to Atlas MongoDB instance");
+  });
+
+  var app = express();
+
+  app.use(logger("short"));
+app.use(express.static(__dirname + "/public"));
+app.use(helmet.xssFilter());
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+
+app.use(cookieParser());
+app.use(csrfProtection);
+app.use(function (req, res, next) {
+  var token = req.csrfToken();
+  res.cookie("XSRF-TOKEN", token);
+  res.locals.csrfToken = token;
+  next();
+});
+
+
 app.set("views", path.resolve(__dirname, "views"));
 app.set("view engine", "ejs");
+app.use(logger("short"));
+
+//employee array
+var employee = new Employee ({
+    name: 'Jazmyn'
+    last: 'Fish'
+},
 
 //routes
 app.get("/", function(request, response){
@@ -38,34 +86,15 @@ app.get("/", function(request, response){
       title: "Add New Employee"
     });
   });
+
+  app.post("/process", function (req, res) {
+    console.log(req.body.txtName);
+    res.redirect("/");
+  });
   
-  app.get('/view', function(request, response) {
-    response.render('view', {
-      title: 'View of Employees'
-    });
-  });
-
-  const firstName = request.body.txtFirstName;
-  const lastName = request.body.txtLastName;
-  console.log(firstName + " " + lastName);
-
-  let employee = new Employee({
-    first: firstName,
-    last: lastName,
-  });
-
-  employees.save(function(err) {
-    if (err) {
-      console.log(err);
-      throw err;
-    } else {
-      console.log(firstName + ' saved successfully!');
-      res.redirect('/');
-    }
-  });
-});
   
  //create server
 http.createServer(app).listen(8080, function(){
     console.log("Application started on port 8080!");
 });
+

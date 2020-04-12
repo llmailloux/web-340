@@ -6,15 +6,31 @@
 ; Description: New
 ;===========================================
 -->
+<%- include('header'); -%>
+<%- include('navbar'); -%>
 
-<%- include('header') %>
-<%- include('navbar') %>
-<div class="container">
-  <div class="row">
-    <h2>New Employees</h2>
+<form class="text-center border border-light p-5" method="post" action="/process">
+
+  <p class="h4 mb-4">New Employee</p>
+
+  <!-- Name -->
+  <div class="form-group">
+    
+  <label for="firstName">First:</label>
+  <input type="text" id="firstName" class="form-control mb-4" placeholder="First Name">
+  <label for="lastName">Last:</label>
+  <input type="text" id="lastName" class="form-control mb-4" placeholder="Last Name">
+
   </div>
-  <div class="row">
-   
+
+  <!-- Submit button -->
+  <!-- CSRF token -->
+  <input name="_csrf" value="<-%= csrfToken %>" type="hidden">
+  <input class="btn btn-secondary float-right" type="submit"></input>
+
+</form>
+
+</html>
   <%- include("footer") %>
 </div>
 
