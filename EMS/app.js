@@ -21,8 +21,6 @@ const csrf = require("csurf");
 
 var Employee = require("./models/employee");
 
-var csrfProtection = csrf({ cookie: true});
-
 var mongoDB = "mongodb+srv://Jazmyn:crazy6kids@buwebdev-cluster-1-2bwgd.mongodb.net/test"
 
 mongoose.connect(mongoDB, {
@@ -38,34 +36,44 @@ db.once("open", function(){
   console.log("Application  connected to Atlas MongoDB instance");
   });
 
+
+  var csrfProtection = csrf({ cookie: true});
+
   var app = express();
 
+  app.set("views", path.resolve(__dirname, "views"));
+  app.set("view engine", "ejs");
+  
   app.use(logger("short"));
-app.use(express.static(__dirname + "/public"));
-app.use(helmet.xssFilter());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+  app.use(bodyParser.urlencoded({
+    extended: true
+  }));
+  app.use(cookieParser());
+  app.use(csrfProtection);
+  app.use(helmet.xssFilter());
+  app.use(express.static(__dirname + "/public"));
+  
+  app.use(function (request, response, next) {
+    let token = request.csrfToken();
+    response.cookie("XSRF-TOKEN", token);
+    response.locals.csrfToken = token;
+    next();
+  });
+  
+  app.get("/", function (request, response) {
+    response.render("index", {
+      title: "Home page"
+    });
+  });
 
-app.use(cookieParser());
-app.use(csrfProtection);
-app.use(function (req, res, next) {
-  var token = req.csrfToken();
-  res.cookie("XSRF-TOKEN", token);
-  res.locals.csrfToken = token;
-  next();
-});
-
-
-app.set("views", path.resolve(__dirname, "views"));
-app.set("view engine", "ejs");
-app.use(logger("short"));
 
 //employee array
+var employeeName = req.body.txtName;
+console.log(employeeName);
+
 var employee = new Employee ({
-    name: 'Jazmyn'
-    last: 'Fish'
-},
+    name: employeeName
+});
 
 //routes
 app.get("/", function(request, response){
@@ -74,12 +82,16 @@ app.get("/", function(request, response){
     });
 });
 
-  app.get("/list", function (request, response) {
-    response.render("list", {
-      title: "Employee List",
-     
-    });
+app.get("/list", function(req, res) {
+  Employee.find({}, function(error, employees) {
+     if (error) throw error;     
+     res.render("list", {
+         title: "Employee List",
+         employees: employees
+     });
   });
+});
+
   
    app.get("/new", function (request, response) {
     response.render("new", {
