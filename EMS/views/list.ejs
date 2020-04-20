@@ -7,40 +7,37 @@
 ;===========================================
 -->
 
-<%- include('header') %>
-<%- include('navbar') %>
-<h2>Employee List</h2><br>
-
-<section class='employees'>
-    <p>
-        N2N Employees:
-    </p>
-</section>
-
-<div role = 'main' class = 'container'>
-    <% if (employeeName.length) { %>
-    <table class='table bg-primary table-striped table-hover'>
+<%- include("header") %>
+<%- include("navbar") %>
+<div class="container">
+  <% if (employees.length > 0) { %>
+    <div class="row">
+      <h2>Employee List</h2>
+    </div>
+    <div class="row">
+      <table class="table table-striped">
         <thead>
-        <tr>
-            <th class='text-white'> First Name</th>
-            <th class='text-white'> Last Name</th>
-        </tr>
+          <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+          </tr>
         </thead>
         <tbody>
-            <% employee.forEach(function(entry) { %>
-                <tr>
-                    <td><%= entry.first %></td>
-                    <td><%= entry.last %></td>
-                    <td><a style='color: white' href='/view/<%= entry.first %>'</a> View</a></td>
-                </tr>
-           <% }) %>
+          <% employees.forEach( (item) => { %>
+          <tr>
+            <td><%= item.firstName %></td>
+            <td><%= item.lastName %></td>
+            <td><a href="/view/<%= item.lastName %>">VIEW</a></td>
+          </tr>
+          <% }); %>
         </tbody>
-        </table>
-        <% } else { %> No Employees <a href = '/new'>Add Employee</a>
-        <% } %>
+      </table>
     </div>
-</div>
-  <%- include("footer") %>
-</div>
+    <%}else {%>
+      <div>No entries</div>
+  <%}%>
 
-
+  <div class="row">
+    <a class="btn btn-primary" href="/new" role="button">Add employees</a></div>
+    <%- include("footer") %>
+</div>

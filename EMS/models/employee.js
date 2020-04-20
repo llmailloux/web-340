@@ -11,24 +11,13 @@
 
 //required
 
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-var Schema = mongoose.Schema;
-
-//define the employeeSchema
-
-var employeeSchema = new Schema({
-   firstName: String,
-   lastName: String
-
+let EmployeeSchema = new Schema({
+  firstName: {type: String, required: true},
+  lastName: {type: String, required: true}
 });
 
-//define the employee model
-
-var Employee = mongoose.model("Employee",employeeSchema);
-
-//expose the employee to calling files
-
+let Employee = mongoose.model("Employee", EmployeeSchema);
 module.exports = Employee;
-
-//end
